@@ -1,0 +1,10 @@
+#!/bin/bash
+ALERT_EMAIL="yourgmail@gmail.com"
+
+Search for failed SSH login attempts in the last 10 minutes
+FAILED_LOGINS=$(journalctl -u ssh --since "10 minutes ago" | grep "Failed password")
+
+if [ ! -z "$FAILED_LOGINS" ]; then
+    echo -e "⚠️ ALERT: Failed SSH login attempts detected!\n\n$FAILED_LOGINS" \
+    | mail -s "SSH Login Alert on $(hostname)" $ALERT_EMAIL
+fi
